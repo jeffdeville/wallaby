@@ -562,6 +562,8 @@ defmodule Wallaby.Phantom.Driver do
         {:error, :stale_reference_error}
       %{"class" => "org.openqa.selenium.InvalidSelectorException"} ->
         {:error, :invalid_selector}
+      %{"class" => "org.openqa.selenium.InvalidElementStateException"} ->
+        {:error, :invalid_selector}
       _ ->
         {:ok, response}
     end

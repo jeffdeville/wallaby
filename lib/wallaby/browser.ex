@@ -593,7 +593,9 @@ defmodule Wallaby.Browser do
           query = %Query{query | result: results}
           raise Wallaby.ExpectationNotMet,
                 Query.ErrorMessage.message(query, :not_found)
-
+        {:error, :invalid_selector} ->
+          raise Wallaby.InvalidSelector,
+            %{"using" => query.method, "value" => query.selector}
       end
     end
   end

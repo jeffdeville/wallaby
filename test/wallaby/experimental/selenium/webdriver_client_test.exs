@@ -52,7 +52,7 @@ defmodule Wallaby.Experimental.Selenium.WebdriverClientTest do
         }>)
       end
 
-      assert {:error, :stale_reference_error} =
+      assert {:error, :stale_reference} =
         Client.request(:post, bypass_url(bypass, "/my_url"))
     end
   end
@@ -480,7 +480,7 @@ defmodule Wallaby.Experimental.Selenium.WebdriverClientTest do
         }>)
       end
 
-      assert {:error, :stale_reference_error} = Client.displayed(element)
+      assert {:error, :stale_reference} = Client.displayed(element)
     end
   end
 

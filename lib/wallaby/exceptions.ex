@@ -66,15 +66,23 @@ end
 defmodule Wallaby.InvalidSelector do
   defexception [:message]
 
-  @spec exception(%{}) :: Exception.t
-  def exception(%{"using" => method, "value" => selector}) do
-    msg = """
-    The #{method} '#{selector}' is invalid.
-    """
-
-    %__MODULE__{message: msg}
+  def exception(_) do
+    %__MODULE__{message: "Shit is broken and invalid yo"}
   end
 end
+
+# defmodule Wallaby.InvalidSelector do
+#   defexception [:message]
+
+#   @spec exception(%{}) :: Exception.t
+#   def exception(%{"using" => method, "value" => selector}) do
+#     msg = """
+#     The #{method} '#{selector}' is invalid.
+#     """
+
+#     %__MODULE__{message: msg}
+#   end
+# end
 
 defmodule Wallaby.CookieException do
   defexception [:message]

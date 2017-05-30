@@ -48,8 +48,10 @@ defmodule Wallaby.Element do
     case driver.clear(element) do
       {:ok, _} ->
         element
-      {:error, _} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
+      {:error, :invalid_selector} ->
+        raise Wallaby.InvalidSelector
     end
   end
 
@@ -76,7 +78,7 @@ defmodule Wallaby.Element do
     case driver.click(element) do
       {:ok, _} ->
         element
-      {:error, _} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
     end
   end
@@ -90,7 +92,7 @@ defmodule Wallaby.Element do
     case driver.text(element) do
       {:ok, text} ->
         text
-      {:error, :stale_reference_error} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
     end
   end
@@ -104,7 +106,7 @@ defmodule Wallaby.Element do
     case driver.attribute(element, name) do
       {:ok, attribute} ->
         attribute
-      {:error, _} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
     end
   end
@@ -151,8 +153,9 @@ defmodule Wallaby.Element do
     case driver.set_value(element, value) do
       {:ok, _} ->
         element
-      {:error, :stale_reference_error} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
+      e -> e
     end
   end
 
@@ -168,8 +171,9 @@ defmodule Wallaby.Element do
     case driver.send_keys(element, keys) do
       {:ok, _} ->
         element
-      {:error, :stale_reference_error} ->
+      {:error, :stale_reference} ->
         raise Wallaby.StaleReferenceException
+      e -> e
     end
   end
 

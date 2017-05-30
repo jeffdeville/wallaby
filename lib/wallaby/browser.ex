@@ -144,6 +144,8 @@ defmodule Wallaby.Browser do
         {:ok, result}
       {:error, :stale_reference} ->
         retry(f, start_time)
+      {:error, :invalid_selector} ->
+        {:error, :invalid_selector}
       {:error, e} ->
         if max_time_exceeded?(start_time) do
           {:error, e}
@@ -190,7 +192,7 @@ defmodule Wallaby.Browser do
 
   def attach_file(parent, query, path: path) do
     parent
-    |> fill_in(query, with: :filename.absname(path))
+    |> set_value(query, :filename.absname(path))
   end
 
   @doc """
@@ -594,8 +596,8 @@ defmodule Wallaby.Browser do
           raise Wallaby.ExpectationNotMet,
                 Query.ErrorMessage.message(query, :not_found)
         {:error, :invalid_selector} ->
-          raise Wallaby.InvalidSelector,
-            %{"using" => query.method, "value" => query.selector}
+          raise Wallaby.QueryError,
+            Query.ErrorMessage.message(query, :invalid_selector)
       end
     end
   end
@@ -886,8 +888,10 @@ defmodule Wallaby.Browser do
              {:ok, elements} <- driver.find_elements(parent, compiled_query),
              {:ok, elements} <- validate_visibility(query, elements),
              {:ok, elements} <- validate_text(query, elements),
-             {:ok, elements} <- validate_count(query, elements),
-         do: {:ok, %Query{query | result: elements}}
+             {:ok, elements} <- validate_count(query, elements)
+         do
+           {:ok, %Query{query | result: elements}}
+        end
       rescue
         Wallaby.StaleReferenceException ->
           {:error, :stale_reference}
